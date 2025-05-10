@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String?
+  role       String   @default("user")
+  provider   String
+  providerId String
+  createdAt  DateTime @default(now())
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  original  String // nom du fichier brut
+  processed String? // nom du fichier traité
+  type      String // image, video, autre
+  createdAt DateTime @default(now())
+}
+
+model Ad {
+  id        Int      @id @default(autoincrement())
+  title     String
+  type      String
+  imageUrl  String?
+  videoUrl  String?
+  mediaUrls String[]
+  clicks    Int      @default(0)
+  link      String
+  active    Boolean  @default(true)
+  startsAt  DateTime
+  endsAt    DateTime
+  createdAt DateTime @default(now())
+}
