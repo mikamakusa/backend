@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, Patch, Req } from '@nestjs/common';
 import { AdsService } from './ads.service';
 import { Ad } from '@prisma/client';
 import { UseGuards } from '@nestjs/common';
@@ -22,23 +22,23 @@ export class AdsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: Partial<Ad>) {
-    return this.adsService.update(+id, body);
+    return this.adsService.update(id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.adsService.remove(+id);
+    return this.adsService.remove(id);
   }
 
   @Post(':id/click')
   async trackClick(@Param('id') id: string) {
-    await this.adsService.incrementClick(+id);
+    await this.adsService.incrementClick(id);
     return { success: true };
   }
 
   @Roles('admin')
   @Delete(':id')
   deleteAd(@Param('id') id: string) {
-    return this.adsService.remove(+id);
+    return this.adsService.remove(id);
   }
 }

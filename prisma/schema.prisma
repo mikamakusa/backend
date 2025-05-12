@@ -33,16 +33,35 @@ model Media {
 }
 
 model Ad {
-  id        Int      @id @default(autoincrement())
+  id        String    @id @default(uuid())
   title     String
   type      String
   imageUrl  String?
   videoUrl  String?
+  targetUrl String
   mediaUrls String[]
-  clicks    Int      @default(0)
+  clicks    Int       @default(0)
+  views     Int       @default(0)
   link      String
-  active    Boolean  @default(true)
-  startsAt  DateTime
-  endsAt    DateTime
+  active    Boolean   @default(true)
+  startsAt  DateTime?
+  endsAt    DateTime?
+  createdAt DateTime  @default(now())
+  AdStat    AdStat[]
+}
+
+model AdStat {
+  id        String   @id @default(uuid())
+  type      StatType
+  ad        Ad       @relation(fields: [adId], references: [id])
+  adId      String
+  userId    String?
+  ip        String?
+  userAgent String?
   createdAt DateTime @default(now())
+}
+
+enum StatType {
+  VIEW
+  CLICK
 }
