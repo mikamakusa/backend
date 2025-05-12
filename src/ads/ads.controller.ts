@@ -1,7 +1,11 @@
 import { Controller, Get, Post, Body, Delete, Param, Patch } from '@nestjs/common';
 import { AdsService } from './ads.service';
 import { Ad } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from '../user/roles.decorator';
+import { RolesGuard } from '../user/roles.guard';
 
+@UseGuards(RolesGuard)
 @Controller('ads')
 export class AdsController {
   constructor(private readonly adsService: AdsService) {}
@@ -30,5 +34,11 @@ export class AdsController {
   async trackClick(@Param('id') id: string) {
     await this.adsService.incrementClick(+id);
     return { success: true };
+  }
+
+  @Roles('admin')
+  @Delete(':id')
+  deleteAd(@Param('id') id: string) {
+    return this.adsService.remove(+id);
   }
 }

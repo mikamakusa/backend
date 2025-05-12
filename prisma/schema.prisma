@@ -8,13 +8,20 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   email      String   @unique
   name       String?
-  role       String   @default("user")
+  roles      Role[]   @relation("UserRoles")
   provider   String
   providerId String
   createdAt  DateTime @default(now())
+}
+
+model Role {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  users     User[]   @relation("UserRoles")
+  createdAt DateTime @default(now())
 }
 
 model Media {
